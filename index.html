@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>real-jamsil</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+                 "Noto Sans KR", Roboto, sans-serif;
+    max-width: 720px; margin: 0 auto; padding: 48px 24px 96px;
+    line-height: 1.7; color: #1f2328; background: #ffffff;
+  }
+  h1 { font-size: 1.9rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.15rem; margin-top: 2.25rem; border-bottom: 1px solid #d8dee4; padding-bottom: .35rem; }
+  .meta { color: #656d76; font-size: .9rem; margin-top: 0; }
+  ul { padding-left: 1.25rem; }
+  li { margin: .35rem 0; }
+  code { background: #f0f2f4; padding: .1rem .35rem; border-radius: 4px; font-size: .9em; }
+  hr { border: none; border-top: 1px solid #d8dee4; margin: 3.5rem 0; }
+  a { color: #0969da; }
+  .lang { color: #656d76; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; }
+
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid #d8dee4; border-radius: 10px;
+    padding: 14px 16px; margin: 22px 0 26px;
+  }
+  .brand svg { flex: 0 0 auto; }
+  .brand-text { font-size: .95rem; }
+  .brand-text strong { display: block; }
+  .brand-text span { color: #656d76; font-size: .88rem; }
+
+  .policy-links {
+    display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 8px;
+  }
+  .policy-links a {
+    display: inline-block; text-decoration: none;
+    border: 1px solid #0969da; border-radius: 6px;
+    padding: 8px 14px; font-size: .92rem; font-weight: 600;
+  }
+  .steps { counter-reset: s; padding-left: 0; list-style: none; }
+  .steps li { position: relative; padding-left: 2.1rem; margin: .55rem 0; }
+  .steps li::before {
+    counter-increment: s; content: counter(s);
+    position: absolute; left: 0; top: .15rem;
+    width: 1.5rem; height: 1.5rem; border-radius: 50%;
+    background: #f0f2f4; color: #1f2328;
+    font-size: .8rem; font-weight: 700; text-align: center; line-height: 1.5rem;
+  }
+  footer { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid #d8dee4;
+           font-size: .9rem; color: #656d76; }
+  footer a { margin-right: 14px; }
+
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6edf3; background: #0d1117; }
+    h2 { border-bottom-color: #30363d; }
+    hr, footer { border-color: #30363d; }
+    code, .steps li::before { background: #21262d; color: #e6edf3; }
+    .meta, .lang, .brand-text span, footer { color: #8b949e; }
+    a { color: #58a6ff; }
+    .brand { border-color: #30363d; }
+    .policy-links a { border-color: #58a6ff; }
+  }
+</style>
+</head>
+<body>
+
+<p class="lang">English</p>
+<h1>real-jamsil</h1>
+<p class="meta">A personal, single-user command-line tool · Last updated: 15 August 2026</p>
+
+<div class="brand">
+  <svg width="42" height="30" viewBox="0 0 90 64" aria-label="YouTube" role="img">
+    <path fill="#FF0000" d="M87.2 10.1a11.3 11.3 0 0 0-7.9-8C72.3 0 45 0 45 0S17.7 0 10.7 2.1a11.3 11.3 0 0 0-7.9 8C.7 17.2.7 32 .7 32s0 14.8 2.1 21.9a11.3 11.3 0 0 0 7.9 8C17.7 64 45 64 45 64s27.3 0 34.3-2.1a11.3 11.3 0 0 0 7.9-8C89.3 46.8 89.3 32 89.3 32s0-14.8-2.1-21.9z"/>
+    <path fill="#FFFFFF" d="M36 45.7 58.8 32 36 18.3z"/>
+  </svg>
+  <div class="brand-text">
+    <strong>This application uses YouTube API Services.</strong>
+    <span>It publishes to its operator's own channel,
+      <a href="https://www.youtube.com/channel/UCd6McqsS2IBQKSsb_W8AQ3w">Seoul, Actually</a>.</span>
+  </div>
+</div>
+
+<div class="policy-links">
+  <a href="https://dataofmen.github.io/real-jamsil-privacy/">Privacy Policy</a>
+  <a href="./terms/">Terms of Service</a>
+</div>
+
+<h2>What it is</h2>
+<p>
+  <strong>real-jamsil</strong> is a personal command-line script written and operated by
+  Hyuckmin Kwon. It takes short vertical videos that the operator has filmed himself around
+  the Jamsil neighbourhood of Seoul, assembles them into short-form clips, and uploads them
+  to the operator's own YouTube channel using the YouTube Data API.
+</p>
+<p>
+  It has no user interface beyond a terminal, no sign-up, no accounts, and no users other
+  than its operator. It is not distributed, sold, or made available to anyone else.
+</p>
+
+<h2>How it works</h2>
+<ol class="steps">
+  <li>The operator drops a video he filmed into a watched folder on his own Mac.</li>
+  <li>Local scripts trim the clip, add captions, and write a metadata file. No API calls yet.</li>
+  <li>The operator reviews the draft and approves it. Nothing is published without approval.</li>
+  <li>The scheduler calls <code>youtube.videos.insert</code> to upload the approved clip to
+      the operator's own channel — at most three per rolling 24 hours.</li>
+  <li>The operator optionally runs a report that reads his own channel's performance via
+      <code>youtube.channels.list</code>, <code>youtube.playlistItems.list</code>,
+      <code>youtube.videos.list</code>, and the YouTube Analytics API.</li>
+</ol>
+
+<h2>Authorization and scopes</h2>
+<p>
+  The tool authorizes against the operator's own Google Account through Google's standard
+  OAuth 2.0 consent screen, requesting exactly three scopes:
+</p>
+<ul>
+  <li><code>youtube.upload</code> — to upload the operator's own videos to his own channel</li>
+  <li><code>youtube.readonly</code> — to confirm the correct channel is authorized and list his own uploads</li>
+  <li><code>yt-analytics.readonly</code> — to read his own channel's performance data</li>
+</ul>
+<p>
+  The resulting refresh token is stored in a local file readable only by the operator's user
+  account, and never leaves his machine except to reach Google's authentication endpoints.
+  Access can be revoked at any time at
+  <a href="https://myaccount.google.com/permissions">Google Account &rsaquo; Third-party apps &amp; services</a>.
+</p>
+
+<h2>What it does not do</h2>
+<ul>
+  <li>It does not collect data from anyone other than its operator.</li>
+  <li>It does not read, download, cache, or re-host anyone else's YouTube content.</li>
+  <li>It does not display YouTube data or content to any audience.</li>
+  <li>It uses no cookies, analytics, advertising identifiers, or tracking technology.</li>
+</ul>
+
+<h2>Terms that apply</h2>
+<ul>
+  <li><a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a></li>
+  <li><a href="https://developers.google.com/youtube/terms/api-services-terms-of-service">YouTube API Services Terms of Service</a></li>
+  <li><a href="https://policies.google.com/privacy">Google Privacy Policy</a></li>
+</ul>
+
+<h2>Contact</h2>
+<p>
+  <a href="mailto:dataofmen@gmail.com">dataofmen@gmail.com</a>
+</p>
+
+<hr>
+
+<p class="lang">한국어</p>
+<h1>real-jamsil</h1>
+<p class="meta">1인용 개인 명령줄 도구 · 최종 수정일: 2026년 8월 15일</p>
+
+<div class="brand">
+  <svg width="42" height="30" viewBox="0 0 90 64" aria-label="YouTube" role="img">
+    <path fill="#FF0000" d="M87.2 10.1a11.3 11.3 0 0 0-7.9-8C72.3 0 45 0 45 0S17.7 0 10.7 2.1a11.3 11.3 0 0 0-7.9 8C.7 17.2.7 32 .7 32s0 14.8 2.1 21.9a11.3 11.3 0 0 0 7.9 8C17.7 64 45 64 45 64s27.3 0 34.3-2.1a11.3 11.3 0 0 0 7.9-8C89.3 46.8 89.3 32 89.3 32s0-14.8-2.1-21.9z"/>
+    <path fill="#FFFFFF" d="M36 45.7 58.8 32 36 18.3z"/>
+  </svg>
+  <div class="brand-text">
+    <strong>본 도구는 YouTube API 서비스를 사용합니다.</strong>
+    <span>운영자 본인의 채널
+      <a href="https://www.youtube.com/channel/UCd6McqsS2IBQKSsb_W8AQ3w">Seoul, Actually</a>에만 업로드합니다.</span>
+  </div>
+</div>
+
+<div class="policy-links">
+  <a href="https://dataofmen.github.io/real-jamsil-privacy/">개인정보처리방침</a>
+  <a href="./terms/">서비스 약관</a>
+</div>
+
+<h2>무엇인가</h2>
+<p>
+  <strong>real-jamsil</strong>은 권혁민이 직접 작성하여 혼자 사용하는 개인용 명령줄
+  스크립트입니다. 운영자가 서울 잠실 일대에서 직접 촬영한 세로 영상을 짧은 클립으로
+  만들어, YouTube Data API를 통해 운영자 본인의 채널에 업로드합니다.
+</p>
+<p>
+  터미널 외의 사용자 인터페이스가 없고, 가입 절차나 계정이 없으며, 운영자 외의
+  사용자가 존재하지 않습니다. 배포·판매되지 않으며 제3자에게 제공되지 않습니다.
+</p>
+
+<h2>동작 방식</h2>
+<ol class="steps">
+  <li>운영자가 직접 촬영한 영상을 본인 맥의 감시 폴더에 넣습니다.</li>
+  <li>로컬 스크립트가 영상을 다듬고 자막을 얹어 메타 파일을 만듭니다. 이 단계에서는 API 호출이 없습니다.</li>
+  <li>운영자가 초안을 검토하고 승인합니다. 승인 없이는 어떤 것도 게시되지 않습니다.</li>
+  <li>스케줄러가 <code>youtube.videos.insert</code>를 호출해 승인된 클립을 본인 채널에
+      업로드합니다. 이동 24시간 기준 최대 3개로 제한됩니다.</li>
+  <li>필요 시 운영자가 <code>youtube.channels.list</code>,
+      <code>youtube.playlistItems.list</code>, <code>youtube.videos.list</code> 및
+      YouTube Analytics API로 본인 채널의 성과를 조회합니다.</li>
+</ol>
+
+<h2>인증 및 권한 범위</h2>
+<p>
+  본 도구는 Google 표준 OAuth 2.0 동의 화면을 통해 운영자 본인의 Google 계정에 대해
+  인증하며, 다음 세 가지 권한만 요청합니다.
+</p>
+<ul>
+  <li><code>youtube.upload</code> — 본인 영상을 본인 채널에 업로드</li>
+  <li><code>youtube.readonly</code> — 올바른 채널이 승인되었는지 확인하고 본인 업로드 목록 조회</li>
+  <li><code>yt-analytics.readonly</code> — 본인 채널의 성과 데이터 조회</li>
+</ul>
+<p>
+  발급된 갱신 토큰은 운영자 계정만 읽을 수 있는 로컬 파일에 저장되며, Google 인증
+  서버 외 어디로도 전송되지 않습니다. 권한은
+  <a href="https://myaccount.google.com/permissions">Google 계정 &rsaquo; 서드 파티 앱 및 서비스</a>에서
+  언제든지 철회할 수 있습니다.
+</p>
+
+<h2>하지 않는 것</h2>
+<ul>
+  <li>운영자 외 다른 사람의 데이터를 수집하지 않습니다.</li>
+  <li>타인의 YouTube 콘텐츠를 읽거나 내려받거나 저장·재호스팅하지 않습니다.</li>
+  <li>YouTube 데이터나 콘텐츠를 외부에 표시하지 않습니다.</li>
+  <li>쿠키, 분석 도구, 광고 식별자 등 어떠한 추적 기술도 사용하지 않습니다.</li>
+</ul>
+
+<h2>적용되는 약관</h2>
+<ul>
+  <li><a href="https://www.youtube.com/t/terms">YouTube 서비스 약관</a></li>
+  <li><a href="https://developers.google.com/youtube/terms/api-services-terms-of-service">YouTube API 서비스 약관</a></li>
+  <li><a href="https://policies.google.com/privacy">Google 개인정보처리방침</a></li>
+</ul>
+
+<h2>문의</h2>
+<p>
+  <a href="mailto:dataofmen@gmail.com">dataofmen@gmail.com</a>
+</p>
+
+<footer>
+  <a href="https://dataofmen.github.io/real-jamsil-privacy/">Privacy Policy / 개인정보처리방침</a>
+  <a href="./terms/">Terms of Service / 서비스 약관</a>
+</footer>
+
+</body>
+</html>
